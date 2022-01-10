@@ -1,0 +1,41 @@
+class Solution
+{
+    public:
+    void linkdelete(struct Node  *head, int M, int N)
+    {
+        //Add code here   
+        while(head) {
+            int tempM = M;
+            while(head && --tempM) head = head -> next;
+            int tempN = N;
+            Node *prevNode = head;
+            while(head && tempN--) head = head -> next;
+            if(prevNode) {
+                head = head ? head -> next : NULL;
+                prevNode -> next = head;
+            }
+        }
+    }
+};
+
+
+
+// { Driver Code Starts.
+int main()
+{
+    int t,n1;
+    cin>>t;
+    while (t--) {
+        cin>>n1;
+        int m,n;
+        cin>>m;
+        cin>>n;
+        insert(n1);
+        Solution ob;
+        ob.linkdelete(start,m,n);
+        printList(start);
+    }
+    
+    return 0;
+}
+  // } Driver Code Ends
