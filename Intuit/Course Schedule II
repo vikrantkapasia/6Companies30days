@@ -1,0 +1,102 @@
+class Solution {
+
+    bool cycledetect_util( vector<vector<int>>& adj, vector<int>& visited,int curr)
+    {
+        if(visited[curr]==1)
+        {
+            return true;
+        }
+        
+        if(visited[curr]==2)
+        {
+            return false;
+        }
+        
+        visited[curr]=1;
+        
+        for(int i =0;i<adj[curr].size();i++)
+        {
+            if(cycledetect_util(adj,visited,adj[curr][i]))
+              return true ;
+        }
+        
+        visited[curr]=2;
+        
+        return false ;
+        
+    }
+
+    bool detectcycle(vector<vector<int>>& adj, int n)
+    {
+        vector<int> visited(n,0);
+        
+        for(int i =0;i<n;i++)
+        {
+            if(cycledetect_util(adj,visited,i))
+              return true;
+        }
+        
+        return false ;
+    }
+    
+    void topologicaldfs(vector<vector<int>>& adj,vector<int>& visited, stack<int> & mystack,int curr)
+        
+    {
+        
+        visited[curr]=true;
+        
+        for(int i =0;i<adj[curr].size();i++)
+        {
+            if(!visited[adj[curr][i]])
+            {
+               topologicaldfs(adj,visited,mystack,adj[curr][i]); 
+            }
+        }
+        
+        mystack.push(curr);
+        
+    }
+    public:
+    
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        
+        int n = prerequisites.size();
+        
+        vector<vector<int>> adj(numCourses);
+        
+        
+        for(auto i=0;i< prerequisites.size();i++)
+        {
+            adj[prerequisites[i][1]].push_back(prerequisites[i][0]);
+        }
+        
+        vector<int> ans ;
+        
+        if(detectcycle(adj,numCourses))
+        {
+            return ans ;
+        }
+        
+        stack<int> mystack;
+        vector<int> visited(numCourses,false);
+        
+        for(int i =0;i<numCourses;i++)
+        {
+            if(!visited[i])
+            {
+                topologicaldfs(adj,visited,mystack,i);
+                 
+            }
+        }
+        
+        while(!mystack.empty())
+        {
+            ans.push_back(mystack.top());
+            mystack.pop();
+        }
+        
+        return ans ;
+        
+        
+    }
+};
